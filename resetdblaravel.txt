@@ -1,0 +1,6 @@
+RESET DATABASE LARAVEL
+php artisan migrate:fresh => hapus semua tabel (users, dll), buat ulang dari migration
+php artisan migrate
+
+kalau ada data penting (opsional)
+php artisan migrate:fresh --seed

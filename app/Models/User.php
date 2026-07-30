@@ -45,4 +45,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relasi ke StockIn
+     */
+    public function stockIns()
+    {
+        return $this->hasMany(StockIn::class);
+    }
+
+    /**
+     * Relasi ke StockOut
+     */
+    public function stockOuts()
+    {
+        return $this->hasMany(StockOut::class);
+    }
 }

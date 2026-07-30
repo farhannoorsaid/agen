@@ -1,0 +1,25 @@
+Penambahan Field database
+- Ubah Controllernya => tambahkan field yang di tambahkan di db
+- app>modelsnya => tambahkan field yang di tambahkan di db
+
+    protected $fillable = [
+        "supplier_id",
+        "nama_barang",
+        "stok",
+        "stok_minimum",
+        "harga_jual",
+        "is_arsip",
+        "row_status",
+    ];
+	
+Delete barang
+- cek action form nya => route('barang.destroy', $item->id)
+- cek controller barang destroy
+
+Perbedaan
+
+$barang = Barang::active()->findOrFail($id);        
+$barang = Barang::findOrFail($id);
+
+- menggunakan active itu akan memfilter is_arsip = 1, jadi dia akan otomatis menyembunyikan data nya (terjadi error)
+- tidak menggunakan active dia tidak akan memfilter, jadi bebas akses
