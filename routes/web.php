@@ -19,8 +19,6 @@ Route::middleware(['auth'])->group(function () {
 
     // ✅ Data Barang
     Route::resource('/barang', BarangController::class);
-   
-    Route::post('/barang/{id}/restore', [BarangController::class, 'restore'])->name('barang.restore');
 
     // ✅ Pemasok/Supplier
     Route::resource('/pemasok', SupplierController::class);

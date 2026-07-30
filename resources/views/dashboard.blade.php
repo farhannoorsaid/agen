@@ -9,9 +9,6 @@
             <p class="text-blue-100">Selamat datang di sistem manajemen stok Agen Hendi</p>
         </div>
 
-        <!-- Alert Success -->
-        <x-alert-success />
-
         <!-- Info Banner -->
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-lg mb-8">
             <p class="text-lg font-semibold">
