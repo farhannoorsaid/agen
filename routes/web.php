@@ -24,7 +24,6 @@ Route::middleware(['auth'])->group(function () {
 
     // ✅ Pemasok/Supplier
     Route::resource('/pemasok', SupplierController::class);
-    Route::post('/pemasok/{id}/restore', [SupplierController::class, 'restore'])->name('pemasok.restore');
 
     // ✅ Stok Masuk
     Route::resource('/stok-masuk', StockInController::class);
