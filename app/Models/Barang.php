@@ -54,15 +54,12 @@ class Barang extends Model
      */
     public function scopeActive($query)
     {
-        
+        return $query->where('row_status', 1);
     }
-
-    /**
-     * Scope untuk barang yang diarsip
-     */
+    
     public function scopeArchived($query)
     {
-       
+        return $query->where('row_status', 0);
     }
 
     /**
@@ -79,9 +76,13 @@ class Barang extends Model
      */
     public function scopeExpiringSoon($query)
 {
-    return $query->whereHas('stockIns', function ($q) {
-        $q->whereRaw('DATEDIFF(tanggal_kedaluwarsa, CURDATE()) BETWEEN 0 AND 30')
-          ->where('sisa', '>', 0);
+    $today = now()->startOfDay();
+    $limit = now()->addDays(30)->endOfDay();
+
+    return $query->whereHas('stockIns', function ($q) use ($today, $limit) {
+        $q->where('sisa', '>', 0)
+          ->whereNotNull('tanggal_kedaluwarsa')
+          ->whereBetween('tanggal_kedaluwarsa', [$today, $limit]);
     });
 }
 }
