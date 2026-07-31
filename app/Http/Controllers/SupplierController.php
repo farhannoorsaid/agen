@@ -59,26 +59,14 @@ class SupplierController extends Controller
     }
 
     public function destroy($id)
-    {
-        // Supplier::findOrFail($id)->delete();
+{
+    $supplier = Supplier::findOrFail($id);
 
-        $supplier = Supplier::findOrFail($id);
+    $supplier->forceDelete(); // atau delete() jika SoftDeletes sudah dihapus
 
-        $supplier->row_status = 0;
-        $supplier->save();
+    return redirect('/pemasok')
+        ->with('success', 'Supplier berhasil dihapus.');
+}
 
-        $supplier->delete(); // ini isi deleted_at
-
-        return redirect('/pemasok')->with('success', 'Supplier berhasil dihapus. Data barang dan stok masuk tetap aman.');
-    }
-
-    /**
-     * Restore supplier dari arsip (undo soft delete)
-     */
-    public function restore($id)
-    {
-        $supplier = Supplier::withTrashed()->findOrFail($id);
-        $supplier->restore();
-        return redirect('/pemasok')->with('success', 'Supplier berhasil dipulihkan');
-    }
+    
 }

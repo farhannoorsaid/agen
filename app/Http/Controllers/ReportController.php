@@ -20,31 +20,40 @@ class ReportController extends Controller
      * Helper: terapkan filter supplier & status ke query Barang
      */
     protected function applyBarangFilters($query, Request $request)
-    {
-        // Filter by supplier
-        if ($request->filled('supplier_id')) {
-            $query->whereHas('suppliers', function($q) use ($request) {
-                $q->where('suppliers.id', $request->supplier_id);
-            });
-        }
+{
+    // Filter supplier
+    if ($request->filled('supplier_id')) {
+        $supplierId = (int) $request->input('supplier_id');
 
-        // Filter by status
-        if ($request->filled('status')) {
-            if ($request->status === 'low') {
-                $query->whereRaw('stok <= stok_minimum');
-            } elseif ($request->status === 'normal') {
-                $query->whereRaw('stok > stok_minimum');
-            } elseif ($request->status === 'expiring') {
-                $query->whereHas('stockIns', function($q) {
-                    $q->where('sisa', '>', 0)
-                      ->whereNotNull('tanggal_kedaluwarsa')
+        $query->whereHas('suppliers', function ($supplierQuery) use ($supplierId) {
+            $supplierQuery->where('suppliers.id', $supplierId);
+        });
+    }
+
+    // Filter status stok
+    if ($request->filled('status')) {
+        switch ($request->input('status')) {
+            case 'low':
+                $query->whereColumn('barangs.stok', '<=', 'barangs.stok_minimum');
+                break;
+
+            case 'normal':
+                $query->whereColumn('barangs.stok', '>', 'barangs.stok_minimum');
+                break;
+
+            case 'expiring':
+                $query->whereHas('stockIns', function ($stockQuery) {
+                    $stockQuery
+                        ->where('sisa', '>', 0)
+                        ->whereNotNull('tanggal_kedaluwarsa')
                       ->whereRaw('DATEDIFF(tanggal_kedaluwarsa, NOW()) <= 30');
                 });
-            }
+                break;
         }
-
-        return $query;
     }
+
+    return $query;
+}
 
     /**
      * Laporan Stok - Real-time inventory status
@@ -62,9 +71,9 @@ class ReportController extends Controller
             ->where('jumlah_masuk', '>', 0)
             ->groupBy('barang_id');
 
-        $query = Barang::active()
-            ->where('barangs.row_status', 1)    
+            $query = Barang::query()
             ->with('suppliers')
+            ->where('barangs.row_status', 1)    
             ->leftJoinSub(
                 $firstExpiredDate,
                 'first_expired_stock',

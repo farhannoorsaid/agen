@@ -62,7 +62,11 @@
                             </td>
                             <td class="px-6 py-4 text-gray-700">
                                 @if($item->tanggal_kedaluwarsa)
-                                    <span class="font-semibold text-orange-700">{{ $item->tanggal_kedaluwarsa->format('d M Y') }}</span>
+                                    @php
+                                        $sisaHari = now()->startOfDay()->diffInDays($item->tanggal_kedaluwarsa->startOfDay(), false);
+                                        $warnaClass = $sisaHari > 30 ? 'text-green-700' : 'text-red-700';
+                                    @endphp
+                                    <span class="font-semibold {{ $warnaClass }}">{{ $item->tanggal_kedaluwarsa->format('d M Y') }}</span>
                                 @else
                                     <span class="text-gray-400">-</span>
                                 @endif

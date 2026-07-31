@@ -78,6 +78,7 @@
                 </thead>
                 <tbody>
                     @forelse($barang as $item)
+                        @continue(!$item->first_exp_date)
                         <tr class="border-b hover:bg-gray-50 transition {{ $item->stok <= $item->stok_minimum ? 'bg-red-50' : '' }}">
                             <td class="px-6 py-4 font-semibold text-gray-800">{{ $item->nama_barang }}</td>
                             <td class="px-6 py-4 text-center">
@@ -95,17 +96,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-gray-700">
-                                @php
-                                    $firstBatch = $item->stockIns()->where('sisa', '>', 0)->orderBy('created_at')->first();
-                                @endphp
-                                {{-- @if($firstBatch && $firstBatch->tanggal_kedaluwarsa)
-                                    <span class="text-sm font-semibold text-orange-700">{{ $firstBatch->tanggal_kedaluwarsa->format('d M Y') }}</span>
-                                @else
-                                    <span class="text-gray-400 text-sm">-</span>
-                                @endif --}}
-                                <span class="text-sm font-semibold text-orange-700">{{ $item->first_exp_date
-                                    ? \Carbon\Carbon::parse($item->first_exp_date)->format('d-m-Y')
-                                    : '-' }}</span>
+                                <span class="text-sm font-semibold text-orange-700">{{ \Carbon\Carbon::parse($item->first_exp_date)->format('d-m-Y') }}</span>
                             </td>
                         </tr>
                     @empty

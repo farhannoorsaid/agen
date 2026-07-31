@@ -11,28 +11,26 @@ class BarangController extends Controller
     /**
      * Display a listing of the barang.
      */
-    public function index(\Illuminate\Http\Request $request)
-    {
-        $search = $request->query('search');
-        
-        $query = Barang::where('row_status', 1)->with([
-            'suppliers' => function ($q) {
-                $q->withTrashed();
-            },
-            'stockIns' => function($q) {
-                $q->where('sisa', '>', 0)->orderByRaw('ISNULL(tanggal_kedaluwarsa), tanggal_kedaluwarsa ASC');
+    public function index(Request $request)
+{
+    $search = $request->search;
+
+    $data = Barang::with([
+            'suppliers',
+            'stockIns' => function ($query) {
+                $query->orderBy('tanggal_kedaluwarsa', 'asc')
+                      ->orderBy('created_at', 'asc');
             }
-        ]);
-
-
-        if ($search) {
+        ])
+        ->when($search, function ($query, $search) {
             $query->where('nama_barang', 'like', '%' . $search . '%');
-        }
+        })
+        ->latest()
+        ->paginate(10)
+        ->withQueryString();
 
-        $data = $query->get();
-
-        return view('barang.index', compact('data', 'search'));
-    }
+    return view('barang.index', compact('data'));
+}
 
     /**
      * Show the form for creating a new barang.
@@ -52,10 +50,16 @@ class BarangController extends Controller
             'supplier_ids' => 'required|array',
             'supplier_ids.*' => 'exists:suppliers,id',
             'nama_barang' => 'required|string|max:255',
-            'stok' => 'required|integer|min:0',
-            'satuan' => 'nullable|string|max:50',
+            'stok' => 'required|integer|min:1',
+            'satuan' => 'required|string|max:50',
             'stok_minimum' => 'required|integer|min:0',
             'harga_jual' => 'required|numeric|min:0',
+        ], [
+            'stok.required' => 'Stok wajib diisi.',
+            'stok.integer' => 'Stok harus berupa angka.',
+            'stok.min' => 'Stok minimal 1.',
+        
+            'satuan.required' => 'Satuan wajib dipilih.',
         ]);
         
         $validated['row_status'] = 1;
@@ -108,27 +112,15 @@ class BarangController extends Controller
     /**
      * Arsipkan barang (soft delete).
      */
-    public function destroy($id)
+    public function destroy(Barang $barang)
     {
-        // $barang = Barang::active()->findOrFail($id);
-        
-        $barang = Barang::findOrFail($id);
-        
-       
-        $barang->update([
-            'row_status' => 0
-        ]);
-
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
+        $barang->delete();
+    
+        return redirect()
+            ->route('barang.index')
+            ->with('success', 'Barang berhasil dihapus.');
     }
 
-    /**
-     * Tampil daftar barang yang diarsip.
-     */
- 
-
-    /**
-     * Restore barang dari arsip.
-     */
+  
 
 }

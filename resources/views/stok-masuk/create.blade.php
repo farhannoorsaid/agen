@@ -67,7 +67,7 @@
 
                 <div class="mb-4">
                     <label for="nomor_lot" class="block text-gray-700 font-semibold mb-2">Nomor Lot / Batch</label>
-                    <input type="text" id="nomor_lot" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contoh: LOT-001">
+                    <input type="text" id="nomor_lot" value="LOT-" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contoh: LOT-001">
                 </div>
 
                 <div class="mb-6">

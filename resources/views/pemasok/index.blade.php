@@ -32,32 +32,18 @@
                         <th class="px-6 py-4 text-left text-gray-700 font-semibold">Nama Supplier</th>
                         <th class="px-6 py-4 text-left text-gray-700 font-semibold">Alamat</th>
                         <th class="px-6 py-4 text-left text-gray-700 font-semibold">No. HP</th>
-                        <!-- <th class="px-6 py-4 text-left text-gray-700 font-semibold">Status</th> -->
                         <th class="px-6 py-4 text-center text-gray-700 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($suppliers as $item)
-                        <tr class="border-b hover:bg-gray-50 transition {{ $item->deleted_at ? 'bg-gray-50' : '' }}">
-                            <td class="px-6 py-4 font-semibold {{ $item->deleted_at ? 'text-gray-500' : 'text-gray-800' }}">
-                                {{ $item->nama_supplier }}
-                                @if($item->deleted_at)
-                                    <span class="text-xs text-gray-400 ml-2">(Diarsipkan)</span>
-                                @endif
+                        <tr class="border-b bg-gray-50 ">
+                            <td class="px-6 py-4 font-semibold text-gray-500">
+                                {{ $item->nama_supplier }}  
                             </td>
-                            <td class="px-6 py-4 {{ $item->deleted_at ? 'text-gray-400' : 'text-gray-700' }}">{{ $item->alamat ?? '-' }}</td>
-                            <td class="px-6 py-4 {{ $item->deleted_at ? 'text-gray-400' : 'text-gray-700' }}">{{ $item->no_hp ?? '-' }}</td>
-                            <!-- <td class="px-6 py-4">
-                                @if($item->deleted_at)
-                                    <span class="inline-block px-3 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">
-                                        <x-icon name="trash" class="inline h-4 w-4 mr-1 text-orange-700"/> Tidak Aktif
-                                    </span>
-                                @else
-                                    <span class="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
-                                        <x-icon name="check" class="inline h-4 w-4 mr-1 text-green-700"/> Aktif
-                                    </span>
-                                @endif
-                            </td> -->
+                            <td class="px-6 py-4 text-gray-500">{{ $item->alamat  }}</td>
+                            <td class="px-6 py-4 text-gray-700">{{ $item->no_hp ?? '-' }}</td>
+                           
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center items-center gap-2">
                                     <a href="{{ route('pemasok.edit', $item->id) }}"
