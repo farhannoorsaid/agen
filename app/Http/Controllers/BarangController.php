@@ -50,11 +50,15 @@ class BarangController extends Controller
             'supplier_ids' => 'required|array',
             'supplier_ids.*' => 'exists:suppliers,id',
             'nama_barang' => 'required|string|max:255',
-            'stok' => 'required|integer|min:0',
+            'stok' => 'required|integer|min:1',
             'satuan' => 'required|string|max:50',
             'stok_minimum' => 'required|integer|min:0',
             'harga_jual' => 'required|numeric|min:0',
         ], [
+            'stok.required' => 'Stok wajib diisi.',
+            'stok.integer' => 'Stok harus berupa angka.',
+            'stok.min' => 'Stok minimal 1.',
+        
             'satuan.required' => 'Satuan wajib dipilih.',
         ]);
         
