@@ -107,18 +107,13 @@ class BarangController extends Controller
     /**
      * Arsipkan barang (soft delete).
      */
-    public function destroy($id)
+    public function destroy(Barang $barang)
     {
-        // $barang = Barang::active()->findOrFail($id);
-        
-        $barang = Barang::findOrFail($id);
-        
-       
-        $barang->update([
-            'row_status' => 0
-        ]);
-
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
+        $barang->delete();
+    
+        return redirect()
+            ->route('barang.index')
+            ->with('success', 'Barang berhasil dihapus.');
     }
 
   

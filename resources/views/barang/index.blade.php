@@ -69,13 +69,21 @@
                                     <a href="{{ route('barang.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm transition shadow-sm inline-flex items-center">
                                         <x-icon name="edit" class="inline h-4 w-4 mr-1"/> Edit
                                     </a> ||
-                                    <form action="{{ route('barang.destroy', $item->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Yakin mau delete barang ini.!')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition shadow-sm inline-flex items-center">
-                                            <x-icon name="archive" class="inline h-4 w-4 mr-1"/> Delete
-                                        </button>
-                                    </form>
+                                    <form action="{{ route('barang.destroy', $item) }}"
+      method="POST"
+      class="inline"
+      onsubmit="return confirm('Yakin ingin menghapus barang ini?')">
+
+    @csrf
+    @method('DELETE')
+
+    <button type="submit"
+        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition shadow-sm inline-flex items-center">
+
+        <x-icon name="archive" class="h-4 w-4 mr-1"/>
+        Delete
+    </button>
+</form>
                                 </div>
                             </td>
                         </tr>

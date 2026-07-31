@@ -78,10 +78,10 @@ class Barang extends Model
      * Sekarang mengecek stock_ins yang belum terjual
      */
     public function scopeExpiringSoon($query)
-    {
-        return $query->whereHas("stockIns", function ($q) {
-            $q->whereRaw("DATEDIFF(tanggal_kedaluwarsa, CURDATE()) < 30 AND tanggal_kedaluwarsa IS NOT NULL")
-              ->where("sisa", ">", 0);
-        });
-    }
+{
+    return $query->whereHas('stockIns', function ($q) {
+        $q->whereRaw('DATEDIFF(tanggal_kedaluwarsa, CURDATE()) BETWEEN 0 AND 30')
+          ->where('sisa', '>', 0);
+    });
+}
 }
