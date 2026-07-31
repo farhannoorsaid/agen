@@ -51,10 +51,11 @@ class BarangController extends Controller
             'supplier_ids.*' => 'exists:suppliers,id',
             'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
-            
-            'satuan' => 'nullable|string|max:50',
+            'satuan' => 'required|string|max:50',
             'stok_minimum' => 'required|integer|min:0',
             'harga_jual' => 'required|numeric|min:0',
+        ], [
+            'satuan.required' => 'Satuan wajib dipilih.',
         ]);
         
         $validated['row_status'] = 1;
